@@ -23,6 +23,8 @@ func Run(listenPort string, env string) error {
 		// transcode
 		signGroup.POST("/transcode", controllers.CreateTranscodeController)
 
+		signGroup.POST("/snapshot", controllers.CreateSnapshotController)
+
 	}
 
 	return r.Run(listenPort)
