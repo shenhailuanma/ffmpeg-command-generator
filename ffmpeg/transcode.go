@@ -5,9 +5,13 @@ import (
 )
 
 type FFmpegTranscodeVideoStreamParams struct {
-	Map    string `json:"map"` // strams map, http://ffmpeg.org/ffmpeg-all.html#Advanced-options
-	Codec  string `json:"codec"`
-	Preset string `json:"preset"`
+	Map     string `json:"map"` // strams map, http://ffmpeg.org/ffmpeg-all.html#Advanced-options
+	Codec   string `json:"codec"`
+	Preset  string `json:"preset"`
+	Width   int    `json:"width"`
+	Height  int    `json:"height"`
+	Bitrate int    `json:"bitrate"`
+	Fps     int    `json:"fps"`
 }
 type FFmpegTranscodeAudioStreamParams struct {
 	Map      string `json:"map"` // strams map, http://ffmpeg.org/ffmpeg-all.html#Advanced-options
@@ -34,5 +38,5 @@ type FFmpegTranscodeRequest struct {
 }
 
 func FFmpegTranscode(request FFmpegTranscodeRequest) (string, error) {
-	return  templates.GenerateCommand("transcode", templates.TranscodeTemplate, request)
+	return templates.GenerateCommand("transcode", templates.TranscodeTemplate, request)
 }

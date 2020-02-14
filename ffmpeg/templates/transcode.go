@@ -15,6 +15,17 @@ const TranscodeTemplate = `
 			{{- if $streamOne.Video.Preset}}
 		 		-preset {{$streamOne.Video.Preset}}
 			{{- end }}
+			{{- if $streamOne.Video.Width}}
+				{{- if $streamOne.Video.Height}}
+					-s {{$streamOne.Video.Width}}x{{$streamOne.Video.Height}}
+				{{- end }}
+			{{- end }}
+			{{- if $streamOne.Video.Fps}}
+		 		-r {{$streamOne.Video.Fps}}
+			{{- end }}
+			{{- if $streamOne.Video.Bitrate}}
+		 		-b:v {{$streamOne.Video.Bitrate}}
+			{{- end }}
 		{{- end }}
 		{{- if eq "audio" $streamOne.Kind}}
 			{{- if $streamOne.Audio.Codec}}
