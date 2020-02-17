@@ -6,6 +6,7 @@ on:
     paths:
       - '**.go'
       - '**.sh'
+      - '**.yml'
 jobs:
 
   build:
@@ -76,5 +77,5 @@ jobs:
       env:
         SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
       with:
-        args: '{\"channel\":\"test\",\"text\":\"PRD deploy done\"}'
+        args: '{\"channel\":\"test\",\"text\":\"Master deploy done\"}'
 
