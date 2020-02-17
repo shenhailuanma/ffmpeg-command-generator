@@ -46,7 +46,7 @@ jobs:
     - name: Copy apiserver.tar.gz to remote
       uses: garygrossgarten/github-action-scp@release
       with:
-        local: ./apiserver.tar.gz
+        local: ./.build/apiserver.tar.gz
         remote: /tmp/apiserver.tar.gz
         host: ${{ secrets.HOST_PRD }}
         username: ${{ secrets.SSH_USER_PRD }}
