@@ -1,0 +1,80 @@
+name: Master deploy
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**.go'
+      - '**.sh'
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+      
+    - name: Get dependencies
+      run: |
+        go mod vendor
+        
+    - name: Build
+      run: |
+        pwd
+        mkdir -p .build
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o ./.build/apiserver ./apiserver/server.go
+
+    - name: Build Check
+      run: |
+        ls -lh
+        ./.build/apiserver -v
+
+    - name: Package
+      run: |
+        tar zcvf ./.build/apiserver.tar.gz ./.build/apiserver
+        ls -lh
+
+    - name: Copy apiserver.tar.gz to remote
+      uses: garygrossgarten/github-action-scp@release
+      with:
+        local: ./apiserver.tar.gz
+        remote: /tmp/apiserver.tar.gz
+        host: ${{ secrets.HOST_PRD }}
+        username: ${{ secrets.SSH_USER_PRD }}
+        password: ${{ secrets.SSH_PASSWORD_PRD }}
+
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_PRD }}
+        username: ${{ secrets.SSH_USER_PRD }}
+        password: ${{ secrets.SSH_PASSWORD_PRD }}
+        script: |
+          mkdir -p /opt/bin
+          mkdir -p /opt/bin/bak
+          cd /tmp && tar zxvf apiserver.tar.gz
+          ls -lh
+          BACKUP_TIME=`date "+%F-%H-%M-%S"` && cp /opt/bin/apiserver /opt/bin/bak/apiserver.${BACKUP_TIME}
+          cp -f /tmp/apiserver /opt/bin/apiserver
+
+    - name: Check service
+      uses: srt32/uptime@master
+      with:
+        url-to-hit: "http://${{ secrets.HOST_PRD }}:9090/healthz"
+        expected-statuses: "200"
+
+    - name: Notice
+      uses: pullreminders/slack-action@master
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      with:
+        args: '{\"channel\":\"test\",\"text\":\"PRD deploy done\"}'
+
