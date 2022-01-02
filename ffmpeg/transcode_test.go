@@ -15,10 +15,20 @@ func Test_FFmpegTranscode(t *testing.T)  {
 				{
 					Kind: "video",
 					Video: FFmpegTranscodeVideoStreamParams{
+						Codec: "h264",
 						Preset: "slow",
+						Height: 1080,
+						Fps: 25,
 					},
 				},
-
+				{
+					Kind: "audio",
+					Audio: FFmpegTranscodeAudioStreamParams{
+						Channels: 2,
+						Codec: "aac",
+						SampleRate: 44100,
+					},
+				},
 			},
 		},
 	}
