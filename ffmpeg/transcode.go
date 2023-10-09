@@ -10,14 +10,16 @@ type FFmpegTranscodeVideoStreamParams struct {
 	Preset  string `json:"preset"`
 	Width   int    `json:"width"`
 	Height  int    `json:"height"`
-	Bitrate int    `json:"bitrate"`
+	Bitrate string `json:"bitrate"`
 	Fps     int    `json:"fps"`
+	CRF     int    `json:"crf"`
 }
 type FFmpegTranscodeAudioStreamParams struct {
 	Map        string `json:"map"` // strams map, http://ffmpeg.org/ffmpeg-all.html#Advanced-options
 	Codec      string `json:"codec"`
 	Channels   int    `json:"channles"`
 	SampleRate int    `json:"sample_rate"`
+	Bitrate    string `json:"bitrate"`
 }
 
 type FFmpegTranscodeStreamParams struct {

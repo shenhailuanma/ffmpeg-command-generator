@@ -31,6 +31,9 @@ const TranscodeTemplate = `
 			{{- if $streamOne.Video.Bitrate}}
 		 		-b:v {{$streamOne.Video.Bitrate}}
 			{{- end }}
+			{{- if $streamOne.Video.CRF}}
+		 		-crf {{$streamOne.Video.CRF}}
+			{{- end }}
 		{{- end }}
 		{{- if eq "audio" $streamOne.Kind}}
 			{{- if $streamOne.Audio.Codec}}
@@ -41,6 +44,9 @@ const TranscodeTemplate = `
 			{{- end }}
 			{{- if $streamOne.Audio.SampleRate}}
 		 		-ar {{$streamOne.Audio.SampleRate}}
+			{{- end }}
+			{{- if $streamOne.Audio.Bitrate}}
+		 		-b:a {{$streamOne.Audio.Bitrate}}
 			{{- end }}
 		{{- end }}
     {{- end }}
